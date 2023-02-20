@@ -1,25 +1,64 @@
-import logo from './logo.svg';
-import './App.css';
+import React,{Component} from 'react'
+import Counters from './components/Counters'
+import Navbar from './components/Navbar'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component{
+  state={
+    counters:[
+        {id:1,value:10},
+        {id:2,value:0},
+        {id:3,value:0},
+        {id:4,value:0}           
+    ]
 }
 
-export default App;
+handleIncrement=({counterid})=>{
+    this.setState(
+        this.state.counters.map((item)=>{
+            if(item.id===counterid){
+                item.value++
+            }
+        })
+
+    )
+}
+
+handleDelete=({btnid})=>{
+    //console.log("Handle Delete" + btnid)  
+    //console.log(btnid)
+    const delElement=this.state.counters.filter((item)=>item.id!==btnid)
+    this.setState({counters:delElement})
+}
+
+handleDecrement=({counterid})=>{
+    this.setState(
+        this.state.counters.map((item)=>{
+            if(item.id===counterid){
+                item.value--
+            }
+        })
+
+    )
+}
+
+render(){
+  return (
+    <>
+        <Navbar totalCounters={this.state.counters.length}/>
+        <main className="container">
+        <Counters 
+        counters={this.state.counters}
+        onDelete={this.handleDelete}
+        onDecrement={this.handleDecrement}
+        onIncrement={this.handleIncrement}
+      
+        />
+        </main>
+       
+    </>
+  )
+}
+
+}
+
+export default App
